@@ -47,7 +47,13 @@ function foliox_tm_modalbox(){
 	
 	"use strict";
 	
-	jQuery('.foliox_tm_all_wrap').prepend('<div class="foliox_tm_modalbox"><div class="box_inner"><div class="close"><a href="#"><i class="icon-cancel"></i></a></div><div class="description_wrap"></div></div></div>');
+	jQuery('.foliox_tm_all_wrap').prepend('<div class="foliox_tm_modalbox"><div class="modal_overlay"></div><div class="box_inner"><div class="close"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a></div><div class="description_wrap"></div></div></div>');
+	
+	// Close on overlay click
+	jQuery('.foliox_tm_modalbox .modal_overlay').on('click', function(){
+		jQuery('.foliox_tm_modalbox').removeClass('opened');
+		jQuery('.foliox_tm_modalbox .description_wrap').html('');
+	});
 }
 
 // -------------------------------------------------
@@ -114,21 +120,36 @@ function foliox_tm_modalbox_news(){
 	"use strict";
 	
 	var modalBox		= jQuery('.foliox_tm_modalbox');
-	var button			= jQuery('.foliox_tm_news .foliox_tm_full_link absolute inset-0 z-[5],.foliox_tm_news .details .title a');
+	var button			= jQuery('.foliox_tm_news .foliox_tm_full_link,.foliox_tm_news .details .title a');
 	var closePopup		= modalBox.find('.close');
 	
 	button.on('click',function(){
 		var element 	= jQuery(this);
 		var parent 		= element.closest('.list_inner');
-		var content 	= parent.find('.news_hidden_details').html();
+		var content 	= parent.find('.news_hidden_details .news_popup_informations .text').html();
 		var image		= element.closest('.list_inner').find('.image .main').data('img-url');
-		var meta		= parent.find('.meta').html();
 		var title	 	= parent.find('.details .title a').text();
+		var summary		= parent.find('.details .summary p').text();
+		
+		// Build enhanced modal content
+		var modalContent = '<div class="modal_content">';
+		modalContent += '<div class="modal_header">';
+		modalContent += '<div class="modal_image" style="background-image: url('+image+')"></div>';
+		modalContent += '<div class="modal_header_overlay"></div>';
+		modalContent += '<div class="modal_title_wrap">';
+		modalContent += '<h3 class="modal_title">'+title+'</h3>';
+		modalContent += '<p class="modal_subtitle">'+summary+'</p>';
+		modalContent += '</div>';
+		modalContent += '</div>';
+		modalContent += '<div class="modal_body">';
+		modalContent += '<div class="modal_description">';
+		modalContent += content;
+		modalContent += '</div>';
+		modalContent += '</div>';
+		modalContent += '</div>';
+		
 		modalBox.addClass('opened');
-		modalBox.find('.description_wrap').html(content);
-		modalBox.find('.news_popup_informations').prepend('<div class="image"><img src="assets/img/thumbs/4-2.jpg" alt="" /><div class="main" data-img-url="'+image+'"></div></div>');
-		modalBox.find('.news_popup_informations .image').after('<div class="details"><div class="meta">'+meta+'</div><div class="title"><h3>'+title+'</h3></div><div>');
-		foliox_tm_data_images();
+		modalBox.find('.description_wrap').html(modalContent);
 		return false;
 	});
 	closePopup.on('click',function(){

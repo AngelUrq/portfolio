@@ -19,6 +19,112 @@
 
 	<link rel="stylesheet" type="text/css" href="assets/css/plugins.css" />
 	<link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+	<style>
+		.solid-card-bg {
+			background: linear-gradient(180deg, #322850 0%, #1e1e24 100%) !important;
+			opacity: 1 !important;
+			backdrop-filter: none !important;
+			padding: 0 !important; /* Inner spacing handled by children */
+		}
+		.solid-card-bg .details {
+			padding: 40px !important; /* Increased padding for better spacing */
+		}
+		.foliox_tm_header {
+			background: rgba(0, 0, 0, 0.3) !important;
+			backdrop-filter: blur(10px);
+		}
+		.foliox_tm_header.animate {
+			background: rgba(0, 0, 0, 0.3) !important;
+			backdrop-filter: blur(10px);
+		}
+		#avatar-container {
+			position: relative;
+			display: inline-block;
+		}
+		#avatar-container .avatar-border {
+			position: absolute;
+			top: -5px;
+			left: -5px;
+			width: calc(100% + 10px);
+			height: calc(100% + 10px);
+			pointer-events: none;
+			transform-origin: center center;
+			z-index: 10;
+		}
+		#avatar-img {
+			position: relative;
+			z-index: 1;
+		}
+		#avatar-img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+		/* Tree Timeline Responsive */
+		@media (max-width: 600px) {
+			.tree-node {
+				padding-left: 35px !important;
+			}
+			.tree-node .flex {
+				flex-direction: column;
+				gap: 15px !important;
+			}
+			.tree-timeline h4 {
+				font-size: 18px !important;
+			}
+		}
+		/* Featured Project Button Hover */
+		#thesis-toggle-btn:hover {
+			background: linear-gradient(135deg, rgba(0, 192, 255, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%) !important;
+			border-color: rgba(0, 192, 255, 0.4);
+			transform: translateY(-2px);
+			box-shadow: 0 8px 24px rgba(0, 192, 255, 0.2);
+		}
+		
+		/* Featured Project Responsive */
+		@media (max-width: 1024px) {
+			.featured-project > div > div {
+				padding-left: 32px !important;
+				padding-right: 32px !important;
+			}
+			.featured-project h3 {
+				font-size: 28px !important;
+			}
+			.featured-project div[style*="grid-template-columns: 2fr 3fr"] {
+				grid-template-columns: 1fr !important;
+			}
+			.featured-project div[style*="grid-template-columns: repeat(4"] {
+				grid-template-columns: repeat(2, 1fr) !important;
+			}
+		}
+		@media (max-width: 768px) {
+			.featured-project > div > div {
+				padding-left: 24px !important;
+				padding-right: 24px !important;
+			}
+			.featured-project h3 {
+				font-size: 24px !important;
+			}
+			.featured-project div[style*="grid-template-columns: repeat(3"] {
+				grid-template-columns: 1fr !important;
+			}
+			.featured-project div[style*="grid-template-columns: repeat(4"] {
+				grid-template-columns: 1fr !important;
+			}
+			.featured-project div[style*="width: 1px; height: 48px"] {
+				display: none !important;
+			}
+		}
+		@media (max-width: 480px) {
+			.featured-project > div > div {
+				padding-left: 20px !important;
+				padding-right: 20px !important;
+			}
+			.featured-project h3 {
+				font-size: 22px !important;
+			}
+		}
+	</style>
 
 	<!--[if lt IE 9]> <script type="text/javascript" src="js/modernizr.custom.js"></script> <![endif]-->
 	<!-- /STYLES -->
@@ -26,6 +132,10 @@
 </head>
 
 <body>
+
+	<!-- DIFFUSION CANVAS BACKGROUND -->
+	<canvas id="diffusionCanvas"></canvas>
+	<!-- /DIFFUSION CANVAS BACKGROUND -->
 
 	<!-- PRELOADER -->
 	<div id="preloader">
@@ -59,9 +169,15 @@
 						<li class="current float-left w-full"><a class="text-white inline-block p-0 font-medium"
 								href="#home">Home</a></li>
 						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
-								href="#about">About</a></li>
+								href="#experience">Experience</a></li>
 						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
 								href="#portfolio">Portfolio</a></li>
+						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
+								href="#skills">Skills</a></li>
+						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
+								href="#about">About</a></li>
+						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
+								href="#publications">Publications</a></li>
 					</ul>
 				</div>
 			</div>
@@ -69,12 +185,12 @@
 		<!-- /MOBILE MENU -->
 
 		<!-- HEADER -->
-		<div class="foliox_tm_header fixed top-0 left-0 right-0 z-[10] py-[45px] px-0 transition-all duration-300">
+		<div class="foliox_tm_header fixed top-0 left-0 right-0 z-[10] transition-all duration-300" style="padding-top: 10px; padding-bottom: 10px;">
 			<div class="container">
 				<div class="inner w-full flex items-center justify-between">
 					<div class="logo">
 						<a class="anchor" href="#home"><img
-								class="max-w-[120px] max-h-[70px] transition-all duration-300"
+								class="transition-all duration-300" style="max-width: 100px; max-height: 40px;"
 								src="assets/img/logo/logo.png" alt="" /></a>
 					</div>
 					<div class="details flex items-center">
@@ -85,10 +201,19 @@
 										href="#home">Home</a></li>
 								<li class="mr-[40px]"><a
 										class="text-white font-poppins transition-all duration-300 hover:text-extra-color"
-										href="#about">About</a></li>
+										href="#experience">Experience</a></li>
 								<li class="mr-[40px]"><a
 										class="text-white font-poppins transition-all duration-300 hover:text-extra-color"
 										href="#portfolio">Portfolio</a></li>
+								<li class="mr-[40px]"><a
+										class="text-white font-poppins transition-all duration-300 hover:text-extra-color"
+										href="#skills">Skills</a></li>
+								<li class="mr-[40px]"><a
+										class="text-white font-poppins transition-all duration-300 hover:text-extra-color"
+										href="#about">About</a></li>
+								<li class="mr-[40px]"><a
+										class="text-white font-poppins transition-all duration-300 hover:text-extra-color"
+										href="#publications">Publications</a></li>
 							</ul>
 						</div>
 						<div class="social relative ml-[60px]">
@@ -102,6 +227,11 @@
 										href="https://github.com/AngelUrq/"><i class="icon-github-1"></i></a></li>
 							</ul>
 						</div>
+						<a href="assets/CV_Angel_Zenteno.pdf" download 
+							class="ml-[40px] text-white font-poppins transition-all duration-300 hover:text-extra-color flex items-center gap-[6px]">
+							<i class="icon-download" style="font-size: 14px;"></i>
+							<span>CV</span>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -113,120 +243,388 @@
 			<div class="foliox_tm_hero w-full h-[100vh] float-left relative">
 				<div class="container">
 					<div class="content h-[100vh] flex items-center">
-						<div class="left w-1/2">
+						<div class="left w-[45%]">
 							<h3 class="name text-[120px] leading-[1.1] mb-[25px]">Ángel <span
 									class="text-extra-color">Zenteno</span></h3>
-							<p class="job text-white text-[23px] font-medium font-poppins mb-[50px]">M.Sc. student in Computer Science @ EPFL</p>
+							<p class="job text-white text-[23px] font-medium font-poppins mb-[50px]">Machine Learning Engineer | M.Sc. in Computer Science @ EPFL</p>
 						</div>
-						<div class="right w-1/2 pl-[80px]">
-							<img class="tilt-effect max-h-[400px]" src="assets/img/hero/avatar.png" alt="" />
+						<div class="right w-[55%] pl-[80px] flex justify-start">
+							<div class="relative inline-block" id="avatar-container">
+								<img class="tilt-effect max-h-[400px]" src="assets/img/hero/avatar.png" alt="" style="display: block; position: relative;" id="avatar-img" />
+								<svg class="avatar-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+									<rect x="0" y="0" width="100" height="100" fill="none" stroke="#00c0ff" stroke-width="1.5" stroke-dasharray="12,18" stroke-dashoffset="0">
+										<animate attributeName="stroke-dashoffset" from="0" to="30" dur="4s" repeatCount="indefinite" />
+									</rect>
+								</svg>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- HERO -->
+	</div>
+	<!-- HERO -->
 
-		<!-- ABOUT -->
-		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="about">
-			<div class="foliox_tm_about w-full h-auto clear-both float-left mb-[245px]">
-				<div class="container">
-					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center">
-						<span
-							class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]"></span>
-						<h3 class="text-[48px]">About Me</h3>
-					</div>
-					<div class="wrapper w-full h-auto clear-both flex mt-[75px]">
-						<div class="left w-1/2 relative">
-							<div class="big_image float-right relative">
-								<img class="tilt-effect max-w-425px max-h-[510px]" src="assets/img/about/1.png"
-									alt="" />
-								<div class="small_image absolute z-[1] right-full top-full mt-[-180px] mr-[-100px]">
-									<div class="in relative">
-										<img class="relative opacity-0 min-w-[337px] max-w-[337px]"
-											src="assets/img/thumbs/1-1.jpg" alt="" />
-										<div class="main tilt-effect absolute inset-0 bg-no-repeat bg-cover bg-center rounded-[10px]"
-											data-img-url="assets/img/about/2.jpg"></div>
-									</div>
-								</div>
-								<span
-									class="badge w-[120px] h-[120px] inline-block absolute bg-extra-color rounded-[10px] top-[160px] right-full mr-[45px]"><img
-										class="svg w-[65px] h-[65px] absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]"
-										src="assets/img/svg/ribbon.svg" alt="" /></span>
+	<!-- EXPERIENCE -->
+	<div class="foliox_tm_section w-full h-auto clear-both float-left" id="experience" style="padding-top: 50px;">
+		<div class="foliox_tm_experience w-full h-auto clear-both float-left" style="margin-bottom: 90px;">
+			<div class="container">
+				<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center mb-[60px]">
+					<span class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Resume</span>
+					<h3 class="text-[48px]">Experience</h3>
+				</div>
+				
+				<!-- Tree Timeline Container -->
+				<div class="tree-timeline relative w-full mx-auto" style="max-width: 900px; padding-left: 40px;">
+					<!-- Main Vertical Line -->
+					<div style="position: absolute; left: 48px; top: 15px; bottom: 50px; width: 2px; background: rgba(0, 192, 255, 0.35); border-radius: 2px;"></div>
+					
+					<!-- Job 1 -->
+					<div class="tree-node relative" style="padding-left: 60px; margin-bottom: 60px;">
+						<!-- Timeline Dot -->
+						<div style="position: absolute; left: 0; top: 5px; width: 16px; height: 16px; background: #00c0ff; border-radius: 50%; box-shadow: 0 0 12px rgba(0,192,255,0.8); z-index: 10;"></div>
+						
+						<!-- Content -->
+						<div class="flex items-start" style="gap: 30px;">
+							<div style="width: 70px; height: 70px; min-width: 70px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+								<img src="assets/img/experience/siemens.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Siemens Healthineers">
 							</div>
-						</div>
-						<div class="right w-1/2 pl-[90px] relative top-[30px]">
-							<h3 class="title text-[30px] mb-[35px]">Personal Information</h3>
-							<p class="text">The incredible pace of research and new discoveries in artificial
-								intelligence points to a very exciting future. Researchers are making great advances
-								towards achieving human-level intelligence in computers. As a computer science research
-								assistant, I am passionate about advancing the current state of the art. I am ready to
-								take the next step and continue developing my skills by pursuing a master's degree.</p>
-							<div
-								class="list w-full clear-both float-left overflow-hidden rounded-[10px] border-solid border-[#625a7d] border-2 mt-[32px] mb-[40px]">
-								<ul class="mt-[-2px] mr-[-10px] mb-[-2px] ml-[-2px] pt-[2px] float-left pl-[90px]">
-									<li class="mb-[11px]">
-										<span
-											class="font-poppins text-[16px] font-medium text-white inline-block">Name</span>
-										<p class="text-[16px]">Ángel Zenteno</p>
-									</li>
-									<li class="mb-[11px]">
-										<span
-											class="font-poppins text-[16px] font-medium text-white inline-block">Email</span>
-										<p class="text-[16px]"><a class="text-main-color"
-												href="mailto:angel.zenteno.u@gmail.com">angel.zenteno.u@gmail.com</a>
-										</p>
-									</li>
-									<li class="mb-[11px]">
-										<span
-											class="font-poppins text-[16px] font-medium text-white inline-block">Degree</span>
-										<p class="text-[16px]">M.Sc. Computer Science - EPFL</p>
-										<p class="text-[16px]">B.Sc. Computer Systems Engineering - UPB</p>
-									</li>
+							<div style="flex: 1;">
+								<h4 style="font-size: 24px; color: #00c0ff; font-weight: 600; line-height: 1.3; margin: 0 0 4px 0;">Machine Learning Engineer</h4>
+								<span style="font-size: 16px; color: rgba(255,255,255,0.7); display: block; margin-bottom: 8px;">Master's Thesis Student</span>
+								<h5 style="font-size: 17px; color: white; font-weight: 500; margin: 0 0 4px 0;">Siemens Healthineers <span style="color: rgba(255,255,255,0.5); font-size: 15px; font-weight: normal;">• Lausanne, Switzerland</span></h5>
+								<p style="font-size: 15px; color: rgba(0,192,255,0.9); font-weight: 500; margin: 0 0 18px 0;">Feb. 2025 - Sep. 2025</p>
+								
+								<ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0;">
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Implemented and trained diffusion models and deep convolutional networks using PyTorch to reconstruct high-fidelity MRI scans from undersampled data.</li>
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Built a data processing pipeline for over 1.3 TB of fastMRI data, handling normalization and preprocessing to speed up large-scale experiments.</li>
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Developed a benchmarking framework to compare classical methods against CNNs and Generative AI, assessing reconstruction accuracy and perceptual quality.</li>
 								</ul>
 							</div>
-							<div class="foliox_tm_button">
-								<a href="assets/CV_Angel_Zenteno.pdf" download><span>Download CV</span></a>
+						</div>
+					</div>
+
+					<!-- Job 2 -->
+					<div class="tree-node relative" style="padding-left: 60px; margin-bottom: 60px;">
+						<!-- Timeline Dot -->
+						<div style="position: absolute; left: 0; top: 5px; width: 16px; height: 16px; background: #00c0ff; border-radius: 50%; box-shadow: 0 0 12px rgba(0,192,255,0.8); z-index: 10;"></div>
+						
+						<!-- Content -->
+						<div class="flex items-start" style="gap: 30px;">
+							<div style="width: 70px; height: 70px; min-width: 70px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+								<img src="assets/img/experience/epfl.png" style="width: 100%; height: 100%; object-fit: contain;" alt="EPFL">
+							</div>
+							<div style="flex: 1;">
+								<h4 style="font-size: 24px; color: #00c0ff; font-weight: 600; line-height: 1.3; margin: 0 0 4px 0;">Computer Vision Engineer</h4>
+								<span style="font-size: 16px; color: rgba(255,255,255,0.7); display: block; margin-bottom: 8px;">Student Assistant - Research Project</span>
+								<h5 style="font-size: 17px; color: white; font-weight: 500; margin: 0 0 4px 0;">Image and Visual Representation Lab (IVRL) - EPFL <span style="color: rgba(255,255,255,0.5); font-size: 15px; font-weight: normal;">• Lausanne, Switzerland</span></h5>
+								<p style="font-size: 15px; color: rgba(0,192,255,0.9); font-weight: 500; margin: 0 0 18px 0;">Jul. 2024 - Oct. 2024</p>
+								
+								<ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0;">
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Developed a real-time deepfake pipeline using Python and OpenCV that integrates the LivePortrait model, showcased at the 'Deepfake and You' exhibition in New York.</li>
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Implemented a custom diffusion model based on the U-Net architecture from scratch in PyTorch for image super-resolution, and evaluated performance using PSNR and SSIM metrics.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Job 3 -->
+					<div class="tree-node relative" style="padding-left: 60px; margin-bottom: 60px;">
+						<!-- Timeline Dot -->
+						<div style="position: absolute; left: 0; top: 5px; width: 16px; height: 16px; background: #00c0ff; border-radius: 50%; box-shadow: 0 0 12px rgba(0,192,255,0.8); z-index: 10;"></div>
+						
+						<!-- Content -->
+						<div class="flex items-start" style="gap: 30px;">
+							<div style="width: 70px; height: 70px; min-width: 70px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+								<img src="assets/img/experience/upb.png" style="width: 100%; height: 100%; object-fit: contain;" alt="UPB">
+							</div>
+							<div style="flex: 1;">
+								<h4 style="font-size: 24px; color: #00c0ff; font-weight: 600; line-height: 1.3; margin: 0 0 4px 0;">Machine Learning Engineer</h4>
+								<span style="font-size: 16px; color: rgba(255,255,255,0.7); display: block; margin-bottom: 8px;">Research Assistant</span>
+								<h5 style="font-size: 17px; color: white; font-weight: 500; margin: 0 0 4px 0;">CINTI - Research Center for New Computer Technologies - UPB <span style="color: rgba(255,255,255,0.5); font-size: 15px; font-weight: normal;">• Cochabamba, Bolivia</span></h5>
+								<p style="font-size: 15px; color: rgba(0,192,255,0.9); font-weight: 500; margin: 0 0 18px 0;">Jun. 2021 - Aug. 2023</p>
+								
+								<ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0;">
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Built an object detection pipeline by fine-tuning an EfficientDet CNN for chemical element identification, and deployed the model for mobile inference using TensorFlow Lite.</li>
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Trained a Recurrent Neural Network (RNN) from scratch to automate spectrometer calibration, achieving over 80% accuracy in spectral line classification.</li>
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Containerized and deployed a resource management REST API using Django and Docker on company servers, allowing users to schedule and run experiments remotely.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Job 4 -->
+					<div class="tree-node relative" style="padding-left: 60px; margin-bottom: 20px;">
+						<!-- Timeline Dot -->
+						<div style="position: absolute; left: 0; top: 5px; width: 16px; height: 16px; background: #00c0ff; border-radius: 50%; box-shadow: 0 0 12px rgba(0,192,255,0.8); z-index: 10;"></div>
+						
+						<!-- Content -->
+						<div class="flex items-start" style="gap: 30px;">
+							<div style="width: 70px; height: 70px; min-width: 70px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+								<img src="assets/img/experience/truextend.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Truextend">
+							</div>
+							<div style="flex: 1;">
+								<h4 style="font-size: 24px; color: #00c0ff; font-weight: 600; line-height: 1.3; margin: 0 0 4px 0;">Software Engineer Intern</h4>
+								<span style="font-size: 16px; color: rgba(255,255,255,0.7); display: block; margin-bottom: 8px;">Internship</span>
+								<h5 style="font-size: 17px; color: white; font-weight: 500; margin: 0 0 4px 0;">Truextend <span style="color: rgba(255,255,255,0.5); font-size: 15px; font-weight: normal;">• Cochabamba, Bolivia</span></h5>
+								<p style="font-size: 15px; color: rgba(0,192,255,0.9); font-weight: 500; margin: 0 0 18px 0;">Jul. 2020 - Aug. 2020</p>
+								
+								<ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0;">
+									<li style="position: relative; padding-left: 20px; font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7;"><span style="position: absolute; left: 0; color: #00c0ff; font-size: 18px;">•</span>Deployed internal micro-services and micro-frontends using Docker and GitLab CI/CD.</li>
+								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
-				<embed style="margin: auto; margin-top: 80px;" src="assets/CV_Angel_Zenteno.pdf" width="60%"
-					height="900">
 			</div>
 		</div>
-		<!-- /ABOUT -->
+	</div>
+	<!-- /EXPERIENCE -->
 
 		<!-- NEWS -->
-		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="portfolio">
-			<div class="foliox_tm_news w-full h-auto clear-both float-left mb-[113px]">
+		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="portfolio" style="padding-top: 50px;">
+			<div class="foliox_tm_news w-full h-auto clear-both float-left" style="margin-bottom: 90px;">
 				<div class="container">
 					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center">
 						<span
-							class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Blog</span>
+							class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">My Work</span>
 						<h3 class="text-[48px]">Portfolio</h3>
 					</div>
-					<div class="news_list w-full h-auto clear-both float-left mt-[70px]">
+
+					<!-- FEATURED PROJECT: Master's Thesis -->
+					<div class="featured-project" style="width: 100%; margin-top: 70px; margin-bottom: 100px;">
+						
+						<div style="background: linear-gradient(165deg, #1a1a2e 0%, #16182a 25%, #0f1419 50%, #121620 75%, #1a1a2e 100%); border: 2px solid rgba(0, 192, 255, 0.12); border-radius: 24px; overflow: hidden; position: relative;">
+							<!-- Subtle gradient overlay -->
+							<div style="position: absolute; top: 0; right: 0; width: 50%; height: 50%; background: radial-gradient(ellipse at top right, rgba(0, 192, 255, 0.06) 0%, transparent 60%); pointer-events: none;"></div>
+							<div style="position: absolute; bottom: 0; left: 0; width: 40%; height: 40%; background: radial-gradient(ellipse at bottom left, rgba(139, 92, 246, 0.05) 0%, transparent 60%); pointer-events: none;"></div>
+							
+							<!-- Header -->
+							<div style="padding: 48px 56px 40px 56px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+								<div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+									<div style="flex: 1; min-width: 300px;">
+										<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+											<span style="padding: 8px 16px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; background: #00c0ff; color: #000;">Featured Project</span>
+											<span style="padding: 8px 16px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7);">Master's Thesis</span>
+											<span style="font-size: 14px; color: rgba(255,255,255,0.5);">Feb – Sep 2025</span>
+										</div>
+										<h3 style="font-size: 36px; color: white; font-weight: 700; line-height: 1.25; margin: 0 0 24px 0; font-family: 'Poppins', sans-serif; letter-spacing: -0.5px;">
+											Diffusion-Based Reconstruction Methods for Magnetic Resonance Imaging
+										</h3>
+										<p style="font-size: 16px; line-height: 1.9; color: rgba(255,255,255,0.6); margin: 0; max-width: 700px;">
+											MRI scans can be accelerated by undersampling k-space data, but this creates aliased images. My thesis explored using 
+											<span style="color: #00c0ff; font-weight: 500;">diffusion models as learned priors</span> to recover high-fidelity reconstructions from degraded measurements.
+										</p>
+									</div>
+									<img src="assets/img/portfolio/siemens_transparent.png" style="width: 170px; height: auto; object-fit: contain; flex-shrink: 0;" alt="Siemens Healthineers" title="Siemens Healthineers">
+								</div>
+							</div>
+
+							<!-- What is a Diffusion Model? (Background) -->
+							<div style="padding: 40px 56px; border-bottom: 1px solid rgba(255,255,255,0.08); background: #000;">
+								<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+									<div>
+										<div style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #8b5cf6; margin-bottom: 12px;">Background</div>
+										<h4 style="font-size: 20px; color: white; font-weight: 600; margin: 0 0 16px 0;">What is a Diffusion Model?</h4>
+										<p style="font-size: 15px; line-height: 1.85; color: rgba(255,255,255,0.6); margin: 0;">
+											A diffusion model learns to generate images by reversing a noising process. Starting from pure Gaussian noise, it iteratively denoises to produce realistic samples. Here, a model trained on fully-sampled brain MRIs generates new anatomically plausible images, this learned prior is what we leverage for reconstruction.
+										</p>
+									</div>
+									<div style="border-radius: 16px; overflow: hidden; background: #000; position: relative;">
+										<div style="width: 100%; padding-top: 55%; position: relative; overflow: hidden;">
+											<img src="assets/img/portfolio/brain_sampling.gif" alt="Diffusion model sampling brain MRI from noise" style="position: absolute; top: 0; left: 0; width: 100%; height: 200%; object-fit: cover; object-position: top;">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Section 1: Main Comparison (Results) -->
+							<div style="padding: 48px 56px;">
+								<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
+									<div style="width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; background: #00c0ff; color: #000;">1</div>
+									<h4 style="font-size: 20px; color: white; font-weight: 600; margin: 0;">Reconstruction Results</h4>
+								</div>
+								
+								<div style="border-radius: 16px; overflow: hidden; background: #000; margin-bottom: 32px;">
+									<img src="assets/img/portfolio/thesis_comparison.png" alt="MRI Reconstruction Comparison" style="width: 100%; height: auto; display: block;">
+								</div>
+								
+								<!-- Labels Grid -->
+								<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+									<div style="padding: 18px 16px; border-radius: 12px; background: rgba(255,255,255,0.04); text-align: center;">
+										<div style="font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 6px;">Zero-filled</div>
+										<div style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Patient image directly from scanner (undersampled)</div>
+									</div>
+									<div style="padding: 18px 16px; border-radius: 12px; background: rgba(255,255,255,0.04); text-align: center;">
+										<div style="font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 6px;">Ground Truth</div>
+										<div style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Ideal image if we acquired all k-space data</div>
+									</div>
+									<div style="padding: 18px 16px; border-radius: 12px; background: rgba(0, 192, 255, 0.1); border: 1px solid rgba(0, 192, 255, 0.25); text-align: center;">
+										<div style="font-size: 14px; color: white; font-weight: 600; margin-bottom: 6px;">DDS Reconstruction</div>
+										<div style="font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.5;">My implementation of a diffusion-based method</div>
+									</div>
+									<div style="padding: 18px 16px; border-radius: 12px; background: rgba(255,255,255,0.04); text-align: center;">
+										<div style="font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 6px;">Uncertainty</div>
+										<div style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5;">Model confidence per pixel (q90-q10)</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- See More Button -->
+							<div style="padding: 0 56px 40px 56px; text-align: center; position: relative;">
+								<button id="thesis-toggle-btn" onclick="toggleThesisDetails()" style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; border-radius: 12px; background: linear-gradient(135deg, rgba(0, 192, 255, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border: 1px solid rgba(0, 192, 255, 0.25); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+									<span id="thesis-toggle-text">See More Details</span>
+									<svg id="thesis-toggle-icon" style="width: 20px; height: 20px; transition: transform 0.3s ease;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+									</svg>
+								</button>
+							</div>
+
+							<!-- Collapsible Content -->
+							<div id="thesis-details" style="display: none; overflow: hidden;">
+								<!-- Section 2: The Method + GIF -->
+								<div style="padding: 48px 56px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+									<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
+										<div style="width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; background: #00c0ff; color: #000;">2</div>
+										<h4 style="font-size: 20px; color: white; font-weight: 600; margin: 0;">How DDS Works</h4>
+									</div>
+
+									<div style="display: grid; grid-template-columns: 2fr 3fr; gap: 24px; margin-bottom: 32px;">
+										<!-- Left: Description -->
+										<div style="padding: 32px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+											<p style="font-size: 15px; line-height: 1.85; color: rgba(255,255,255,0.65); margin: 0 0 20px 0;">
+												I implemented <span style="color: white; font-weight: 500;">DPS</span> and <span style="color: white; font-weight: 500;">DDS</span> diffusion inverse solvers using pre-trained models on the <span style="color: #00c0ff;">fastMRI</span> dataset (brain & knee MRIs).
+											</p>
+											<p style="font-size: 15px; line-height: 1.85; color: rgba(255,255,255,0.65); margin: 0;">
+												The benchmark evaluates whether generative AI outperforms classical compressed sensing and other deep learning methods.
+											</p>
+										</div>
+										
+										<!-- Right: GIF -->
+										<div style="border-radius: 16px; overflow: hidden; background: #000; border: 1px solid rgba(255,255,255,0.08);">
+											<img src="assets/img/portfolio/dds_process.gif" alt="DDS Process" style="width: 100%; height: auto; display: block;">
+										</div>
+									</div>
+
+									<!-- Process Steps -->
+									<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+										<div style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+											<div style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); flex-shrink: 0;">
+												<span style="font-size: 20px;">🌀</span>
+											</div>
+											<div>
+												<div style="font-size: 15px; color: white; font-weight: 600; margin-bottom: 4px;">Noisy Estimate</div>
+												<div style="font-size: 13px; color: rgba(255,255,255,0.5);">Progressive denoising</div>
+											</div>
+										</div>
+										<div style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-radius: 14px; background: rgba(0, 192, 255, 0.06); border: 1px solid rgba(0, 192, 255, 0.15);">
+											<div style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(0, 192, 255, 0.15); flex-shrink: 0;">
+												<span style="font-size: 20px;">🧠</span>
+											</div>
+											<div>
+												<div style="font-size: 15px; color: white; font-weight: 600; margin-bottom: 4px;">Reconstruction</div>
+												<div style="font-size: 13px; color: rgba(255,255,255,0.5);">Clean image estimate</div>
+											</div>
+										</div>
+										<div style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+											<div style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); flex-shrink: 0;">
+												<span style="font-size: 20px;">📡</span>
+											</div>
+											<div>
+												<div style="font-size: 15px; color: white; font-weight: 600; margin-bottom: 4px;">Data Consistency</div>
+												<div style="font-size: 13px; color: rgba(255,255,255,0.5);">K-space fidelity</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Section 3: Benchmark -->
+								<div style="padding: 48px 56px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+									<div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
+										<div style="width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; background: #8b5cf6; color: white;">3</div>
+										<h4 style="font-size: 20px; color: white; font-weight: 600; margin: 0;">Benchmark: DL vs Diffusion</h4>
+									</div>
+									
+									<div style="border-radius: 16px; overflow: hidden; background: #000; margin-bottom: 32px;">
+										<img src="assets/img/portfolio/thesis_benchmark.png" alt="Benchmark Comparison" style="width: 100%; height: auto; display: block;">
+									</div>
+									
+									<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+										<div style="padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.04); text-align: center;">
+											<span style="font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 500;">Ground Truth</span>
+										</div>
+										<div style="padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.04); text-align: center;">
+											<span style="font-size: 14px; color: rgba(255,255,255,0.75); font-weight: 500;">Deep Learning Unrolled Network</span>
+										</div>
+										<div style="padding: 16px; border-radius: 12px; background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.25); text-align: center;">
+											<span style="font-size: 14px; color: #a78bfa; font-weight: 600;">Diffusion Inverse Solver</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Footer: Stats + Tags -->
+								<div style="padding: 40px 56px;">
+									<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 32px;">
+										<!-- Stats -->
+										<div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+											<div>
+												<div style="font-size: 28px; font-weight: 700; color: #00c0ff; margin-bottom: 6px;">1.3TB+</div>
+												<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.45);">Data Processed</div>
+											</div>
+											<div style="width: 1px; height: 48px; background: rgba(255,255,255,0.12);"></div>
+											<div>
+												<div style="font-size: 28px; font-weight: 700; color: #8b5cf6; margin-bottom: 6px;">DPS & DDS</div>
+												<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.45);">Methods Tested</div>
+											</div>
+											<div style="width: 1px; height: 48px; background: rgba(255,255,255,0.12);"></div>
+											<div>
+												<div style="font-size: 28px; font-weight: 700; color: white; margin-bottom: 6px;">PyTorch</div>
+												<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.45);">Implementation</div>
+											</div>
+										</div>
+										
+										<!-- Tags -->
+										<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+											<span style="padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.1);">Diffusion Models</span>
+											<span style="padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.1);">fastMRI</span>
+											<span style="padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.1);">Medical Imaging</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /FEATURED PROJECT -->
+
+					<!-- Other Projects Title -->
+					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center mb-[50px]">
+						<span class="text-[18px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Other Work</span>
+						<h3 class="text-[32px]">More Projects</h3>
+					</div>
+
+					<div class="news_list w-full h-auto clear-both float-left">
 						<ul class="ml-[-25px] flex flex-wrap">
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/1.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">SpectraUPB - Spectrometry app for smartphones</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">SpectraUPB
-													- Spectrometry app for smartphones</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">Low-cost smartphone spectrometer software for substance analysis.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -255,26 +653,29 @@
 
 								</div>
 							</li>
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s"
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s"
 								data-wow-delay="0.2s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/2.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">Automatic Calibration - Recurrent Neural Network</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">Automatic
-													Calibration - Recurrent Neural Network</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">Automating spectrometer calibration using recurrent neural networks.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -304,27 +705,29 @@
 
 								</div>
 							</li>
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s"
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s"
 								data-wow-delay="0.4s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/3.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">Spectra Element Detection - Neon and Mercury</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">Spectra
-													Element Detection - Neon and Mercury</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">CNN-based automatic element detection from spectral images.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -357,25 +760,28 @@
 					</div>
 					<div class="news_list w-full h-auto clear-both float-left mt-[70px]">
 						<ul class="ml-[-25px] flex flex-wrap">
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/4.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">Space Legacy - NASA Space Apps Challenge</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">Space
-													Legacy - NASA Space Apps Challenge</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">AI platform summarizing 300,000+ NASA scientific documents.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -401,25 +807,29 @@
 
 								</div>
 							</li>
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s"
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s"
 								data-wow-delay="0.2s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/5.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">Drone diffusion model for Super‑Resolution</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">Drone diffusion model for Super‑Resolution												</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">Diffusion model implementation for super-resolution on drone images.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -437,27 +847,29 @@
 
 								</div>
 							</li>
-							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3" data-wow-duration="1s"
+							<li class="wow fadeInUp mb-[50px] pl-[25px] w-1/3 flex" data-wow-duration="1s"
 								data-wow-delay="0.4s">
-								<div class="list_inner tilt-effect w-full h-auto clear-both float-left relative">
-									<div class="image relative overflow-hidden rounded-tl-[12px] rounded-tr-[12px]">
+								<div class="list_inner solid-card-bg w-full h-full flex flex-col relative overflow-hidden rounded-[12px] shadow-md hover:shadow-xl transition-all duration-300 group">
+									<div class="image relative overflow-hidden">
 										<img class="relative opacity-0 min-w-full" src="assets/img/thumbs/42-29.jpg"
 											alt="" />
-										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center rounded-tl-[12px] rounded-tr-[12px]"
+										<div class="main absolute inset-0 bg-no-repeat bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
 											data-img-url="assets/img/news/6.jpg"></div>
-										<a class="foliox_tm_full_link absolute inset-0 z-[5]"></a>
 									</div>
-
-									<div
-										class="details bg-[#3a2b71] w-full float-left py-[28px] px-[35px] rounded-bl-[12px] rounded-br-[12px]">
-										<div class="meta w-full float-left mb-[10px]">
-											<p class="text-[16px]"><a
-													class="text-extra-color font-medium pr-[7px]">Project</a></p>
+									<div class="details w-full flex flex-col flex-grow p-[30px]">
+										<div class="title w-full float-left mb-[10px]">
+											<h3 class="leading-[1.3] text-white text-[18px] font-semibold line-clamp-2 min-h-[48px]"><a class="text-white transition-all duration-300 pointer-events-none">Alpaca Tutor: A LLM-Based Chatbot for Assisting Students in STEM Courses</a></h3>
 										</div>
-										<div class="title w-full float-left">
-											<h3 class="leading-[1.4]"><a
-													class="text-white inline-block text-[21px] transition-all duration-300">Alpaca Tutor: A LLM-Based Chatbot for Assisting
-													Students in STEM Courses</a></h3>
+										<div class="summary w-full float-left mb-[20px]">
+											<p class="text-[14px] text-main-color leading-[1.6] line-clamp-2">LLM-powered digital tutor for EPFL students using Llama 3.</p>
+										</div>
+										<div class="w-full flex justify-end mt-auto">
+											<a class="foliox_tm_full_link inline-flex items-center text-extra-color font-medium text-[14px] group-hover:text-white transition-all duration-300 cursor-pointer" style="text-decoration: none;">
+												<span>View Details</span>
+												<svg class="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+												</svg>
+											</a>
 										</div>
 									</div>
 
@@ -478,43 +890,6 @@
 							</li>
 						</ul>
 					</div>
-					
-					<div class="list w-full clear-both float-left overflow-hidden mt-[32px] mb-[40px] pt-8 pb-8">
-						<ul class="mt-[-2px] mr-[-10px] mb-[-2px] ml-[-2px] pt-[2px] float-left pl-[90px] list-disc marker:text-white">
-						  <li class="mb-[22px]">
-							<span class="font-poppins text-[24px] font-bold text-white inline-block mb-4">Publications</span>
-						  </li>
-						  <li class="mb-[22px]">
-							<p class="text-[16px] text-white ml-2">- Zenteno, A., Orellana, A., Villazon, A., Ormachea, O. (2023).
-							  Automatic Selection of Reference Lines for Spectrometer Calibration with Recurrent
-							  Neural Networks, SmartTech‑IC 2022</p>
-						  </li>
-						  <li class="mb-[22px]">
-							<p class="text-[16px] text-white ml-2">- Ormachea, O., Villazon, A., Orellana, A., Zenteno, A. (2023). A
-							  low‑cost 3D‑printed spectrometer based on Raspberry Pi, RIAO/OPTILAS. (Preprint)</p>
-						  </li>
-						  <li class="mb-[22px]">
-							<p class="text-[16px] text-white ml-2">- Villazon, A., Ormachea, O., Orellana, A., Zenteno, A., Fransson
-							  T. (2023). Work in Progress: A Booking System for Remote Laboratories ‑ The
-							  EXPLORE Energy Digital Academy (EEDA) case study, REV2023 Conference.
-							</p>
-						  </li>
-						  <li class="mb-[22px]">
-							<p class="text-[16px] text-white ml-2">- Villazon, A., Ormachea, O., Zenteno, A., Orellana, A. (2023). A
-							  Low‑Cost Spectrometry Remote Laboratory. In: Auer, M.E., El‑Seoud, S.A., Karam,
-							  O.H. (eds) Artificial Intelligence and Online Engineering. REV 2022. Lecture Notes
-							  in Networks and Systems, vol 524. Springer, Cham.
-							</p>
-						  </li>
-						  <li class="mb-[22px]">
-							<p class="text-[16px] text-white ml-2">- Rosales E., Rosa A., Basso M., Villazon, A., Orellana, A.,
-							  Zenteno, A., et al (2022). Characterizing Java Streams in the Wild, 26th
-							  International
-							  Conference on Engineering of Complex Computer Systems (ICECCS).</p>
-						  </li>
-						</ul>
-					  </div>
-					  
 				</div>
 			</div>
 		</div>
@@ -522,68 +897,216 @@
 		<!-- /NEWS -->
 
 		<!-- SKILLS -->
-		<div class="foliox_tm_section w-full h-auto clear-both float-left">
-			<div class="foliox_tm_skills w-full h-auto clear-both float-left mb-[163px]">
+		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="skills" style="padding-top: 50px;">
+			<div class="foliox_tm_skills w-full h-auto clear-both float-left" style="margin-bottom: 90px;">
+				<div class="container">
+					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center mb-[60px]">
+						<span class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Expertise</span>
+						<h3 class="text-[48px]">Skills & Tools</h3>
+					</div>
+					
+					<!-- Grid Layout for Skills -->
+					<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
+						
+						<!-- Programming Languages -->
+						<div class="bg-[#1e1e24] rounded-[12px] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group" style="padding: 30px;">
+							<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+								<div style="min-width: 40px; height: 40px; background: #2a233e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00c0ff;">
+									<i class="icon-code" style="font-size: 18px;"></i>
+								</div>
+								<h4 style="font-size: 20px; color: white; font-weight: 500; margin: 0;">Languages</h4>
+							</div>
+							<div class="flex flex-wrap" style="gap: 12px;">
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="Python">
+									Python
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="C++">
+									C++
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<svg style="width: 22px; height: 22px; margin-right: 2px;" class="fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 4.24 2 7v10c0 2.76 4.48 5 10 5s10-2.24 10-5V7c0-2.76-4.48-5-10-5zm0 2c4.27 0 8 1.72 8 3s-3.73 3-8 3-8-1.72-8-3 3.73-3 8-3zm0 16c-4.27 0-8-1.72-8-3v-2.33c1.72 1.66 4.65 2.66 8 2.66s6.28-1 8-2.66V17c0 1.28-3.73 3-8 3zm0-5c-4.27 0-8-1.72-8-3v-2.33c1.72 1.66 4.65 2.66 8 2.66s6.28-1 8-2.66V12c0 1.28-3.73 3-8 3z"/></svg>
+									SQL
+								</span>
+							</div>
+						</div>
+
+						<!-- ML & AI -->
+						<div class="bg-[#1e1e24] rounded-[12px] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group" style="padding: 30px;">
+							<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+								<div style="min-width: 40px; height: 40px; background: #2a233e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00c0ff;">
+									<i class="icon-lightbulb" style="font-size: 18px;"></i>
+								</div>
+								<h4 style="font-size: 20px; color: white; font-weight: 500; margin: 0;">Machine Learning</h4>
+							</div>
+							<div class="flex flex-wrap" style="gap: 12px;">
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="PyTorch">
+									PyTorch
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="Scikit-learn">
+									Scikit-learn
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<span style="font-size: 22px; margin-right: 2px;">🤗</span>
+									Transformers
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<span style="font-size: 22px; margin-right: 2px;">🦜</span>
+									LangGraph
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opencv/opencv-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="OpenCV">
+									OpenCV
+								</span>
+							</div>
+						</div>
+
+						<!-- Data Science -->
+						<div class="bg-[#1e1e24] rounded-[12px] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group" style="padding: 30px;">
+							<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+								<div style="min-width: 40px; height: 40px; background: #2a233e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00c0ff;">
+									<i class="icon-chart-bar" style="font-size: 18px;"></i>
+								</div>
+								<h4 style="font-size: 20px; color: white; font-weight: 500; margin: 0;">Data Science</h4>
+							</div>
+							<div class="flex flex-wrap" style="gap: 12px;">
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="NumPy">
+									NumPy
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="Pandas">
+									Pandas
+								</span>
+							</div>
+						</div>
+
+						<!-- Infrastructure -->
+						<div class="bg-[#1e1e24] rounded-[12px] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group" style="padding: 30px;">
+							<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
+								<div style="min-width: 40px; height: 40px; background: #2a233e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00c0ff;">
+									<i class="icon-cog" style="font-size: 18px;"></i>
+								</div>
+								<h4 style="font-size: 20px; color: white; font-weight: 500; margin: 0;">Infrastructure</h4>
+							</div>
+							<div class="flex flex-wrap" style="gap: 12px;">
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="FastAPI">
+									FastAPI
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="PostgreSQL">
+									PostgreSQL
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="Docker">
+									Docker
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" style="width: 22px; height: 22px; margin-right: 2px;" alt="Git">
+									Git
+								</span>
+								<span class="px-[20px] py-[10px] bg-[#2a233e] rounded-[8px] text-white/80 text-[16px] border border-white/5 hover:border-extra-color hover:text-white transition-all duration-300 cursor-default" style="display: inline-flex; align-items: center; gap: 10px;">
+									<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" style="width: 17px; height: 17px; filter: invert(1);" alt="AWS">
+									AWS
+								</span>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- ABOUT -->
+		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="about" style="padding-top: 50px;">
+			<div class="foliox_tm_about w-full h-auto clear-both float-left" style="margin-bottom: 90px;">
 				<div class="container">
 					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center">
 						<span
-							class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Skills</span>
-						<h3 class="text-[48px]">I Work Hard to Improve My Skills Regularly</h3>
+							class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]"></span>
+						<h3 class="text-[48px]">About Me</h3>
 					</div>
-					<div class="list w-full h-auto clear-both flex mt-[47px]">
-						<div class="left w-1/2 pr-[67px]">
-							<div class="dodo_progress wow fadeInUp w-full h-auto clear-both float-left pt-[30px] overflow-hidden"
-								data-wow-duration="1s">
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">Python</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
-										</div>
-									</div>
-								</div>
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">SQL</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
-										</div>
-									</div>
-								</div>
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">NumPy</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
-										</div>
+					<div class="wrapper w-full h-auto clear-both flex items-start mt-[75px]">
+						<div class="left w-1/2 relative">
+							<div class="big_image float-right relative">
+								<img class="tilt-effect max-w-425px max-h-[510px]" src="assets/img/about/1.png"
+									alt="" />
+								<div class="small_image absolute z-[1] right-full top-full mt-[-180px] mr-[-100px]">
+									<div class="in relative rounded-[10px] overflow-hidden" style="border: 1px solid white;">
+										<img class="relative opacity-0 min-w-[337px] max-w-[337px]"
+											src="assets/img/thumbs/1-1.jpg" alt="" />
+										<div class="main tilt-effect absolute inset-0 bg-no-repeat bg-cover bg-center rounded-[10px]"
+											data-img-url="assets/img/about/2.jpg"></div>
 									</div>
 								</div>
 							</div>
+							<div class="clear-both w-full"></div>
+							<div class="w-full" style="height: 120px;"></div>
+							<div class="foliox_tm_button flex justify-center">
+								<a href="assets/CV_Angel_Zenteno.pdf" download><span>Download CV</span></a>
+							</div>
 						</div>
-						<div class="right w-1/2 pl-[67px]">
-							<div class="dodo_progress wow fadeInUp w-full h-auto clear-both float-left pt-[30px] overflow-hidden"
-								data-wow-duration="1s">
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">PyTorch</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
+						<div class="right w-1/2 pl-[90px] relative">
+							<h3 class="title text-[30px] mb-[35px]">Personal Information</h3>
+							<p class="text mb-[32px]">I am a Machine Learning Engineer with three years of experience building systems with Computer Vision and Generative AI. I have worked on a wide range of projects, including training diffusion models, building object detection pipelines, and fine-tuning LLM chatbots.</p>
+							<div class="list w-full clear-both float-left mt-[32px] mb-[40px]">
+								<div class="flex flex-wrap -mx-[20px]">
+									<div class="w-1/2 px-[20px] mb-[20px]">
+										<div class="flex items-start">
+											<i class="icon-user text-extra-color text-[20px] mt-[2px] flex-shrink-0" style="margin-right: 17px;"></i>
+											<div>
+												<span class="font-poppins text-[16px] font-medium text-white inline-block block mb-[5px]">Name</span>
+												<p class="text-[16px] m-0">Ángel Zenteno</p>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">Docker</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
+									<div class="w-1/2 px-[20px] mb-[20px]">
+										<div class="flex items-start">
+											<i class="icon-mail-alt text-extra-color text-[20px] mt-[2px] flex-shrink-0" style="margin-right: 17px;"></i>
+											<div>
+												<span class="font-poppins text-[16px] font-medium text-white inline-block block mb-[5px]">Email</span>
+												<p class="text-[16px] m-0">
+													<a class="text-extra-color hover:text-white transition-all duration-300 underline" 
+														href="mailto:angel.zenteno.u@gmail.com">angel.zenteno.u@gmail.com</a>
+												</p>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="progress_inner" data-value="100">
-									<span><span class="label">Django</span><span class="number"></span></span>
-									<div class="background">
-										<div class="bar">
-											<div class="bar_in"></div>
+									<div class="w-1/2 px-[20px] mb-[20px]">
+										<div class="flex items-start">
+											<i class="icon-graduation-cap text-extra-color text-[20px] mt-[2px] flex-shrink-0" style="margin-right: 17px;"></i>
+											<div>
+												<span class="font-poppins text-[16px] font-medium text-white inline-block block mb-[5px]">Degree</span>
+												<p class="text-[16px] m-0">M.Sc. Computer Science - EPFL</p>
+												<p class="text-[16px] m-0">B.Sc. Computer Systems Engineering - UPB</p>
+											</div>
+										</div>
+									</div>
+									<div class="w-1/2 px-[20px] mb-[20px]">
+										<div class="flex items-start">
+											<i class="icon-link text-extra-color text-[20px] mt-[2px] flex-shrink-0" style="margin-right: 17px;"></i>
+											<div>
+												<span class="font-poppins text-[16px] font-medium text-white inline-block block mb-[5px]">Social Links</span>
+												<div class="flex items-center gap-[15px] mt-[5px]">
+													<a class="text-extra-color hover:text-white transition-all duration-300 text-[20px]" 
+														href="https://www.linkedin.com/in/%C3%A1ngel-zenteno-a0174020b/" 
+														target="_blank" 
+														title="LinkedIn">
+														<i class="icon-linkedin-1"></i>
+													</a>
+													<a class="text-extra-color hover:text-white transition-all duration-300 text-[20px]" 
+														href="https://github.com/AngelUrq/" 
+														target="_blank" 
+														title="GitHub">
+														<i class="icon-github-1"></i>
+													</a>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -593,9 +1116,77 @@
 				</div>
 			</div>
 		</div>
-		<!-- /SKILLS -->
+		<!-- /ABOUT -->
 
+		<!-- PUBLICATIONS -->
+		<div class="foliox_tm_section w-full h-auto clear-both float-left" id="publications" style="padding-top: 50px;">
+			<div class="foliox_tm_publications w-full h-auto clear-both float-left" style="margin-bottom: 75px;">
+				<div class="container">
+					<div class="foliox_tm_main_title w-full max-w-[650px] h-auto clear-both my-0 mx-auto text-center mb-[60px]">
+						<span class="text-[21px] font-poppins text-extra-color font-medium inline-block mb-[5px]">Research</span>
+						<h3 class="text-[48px]">Publications</h3>
+					</div>
+					
+					<div class="grid grid-cols-1 gap-[20px]">
+						<!-- Publication 1 -->
+						<div class="w-full p-[25px] rounded-[12px] bg-[#1e1e24] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group flex items-start gap-[20px]">
+							<div class="min-w-[50px] h-[50px] rounded-full bg-[#2a233e] flex items-center justify-center text-extra-color group-hover:bg-extra-color group-hover:text-white transition-all duration-300">
+								<i class="icon-doc-text-inv text-[20px]"></i>
+							</div>
+							<div>
+								<h4 class="text-[18px] text-white font-medium mb-[5px] leading-[1.4]">Automatic Selection of Reference Lines for Spectrometer Calibration with Recurrent Neural Networks</h4>
+								<p class="text-[15px] text-main-color leading-[1.6]">Zenteno, A., Orellana, A., Villazon, A., Ormachea, O. (2023) • <span class="italic text-white/60">SmartTech‑IC 2022</span></p>
+							</div>
+						</div>
 
+						<!-- Publication 2 -->
+						<div class="w-full p-[25px] rounded-[12px] bg-[#1e1e24] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group flex items-start gap-[20px]">
+							<div class="min-w-[50px] h-[50px] rounded-full bg-[#2a233e] flex items-center justify-center text-extra-color group-hover:bg-extra-color group-hover:text-white transition-all duration-300">
+								<i class="icon-doc-text-inv text-[20px]"></i>
+							</div>
+							<div>
+								<h4 class="text-[18px] text-white font-medium mb-[5px] leading-[1.4]">A low‑cost 3D‑printed spectrometer based on Raspberry Pi</h4>
+								<p class="text-[15px] text-main-color leading-[1.6]">Ormachea, O., Villazon, A., Orellana, A., Zenteno, A. (2023) • <span class="italic text-white/60">RIAO/OPTILAS (Preprint)</span></p>
+							</div>
+						</div>
+
+						<!-- Publication 3 -->
+						<div class="w-full p-[25px] rounded-[12px] bg-[#1e1e24] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group flex items-start gap-[20px]">
+							<div class="min-w-[50px] h-[50px] rounded-full bg-[#2a233e] flex items-center justify-center text-extra-color group-hover:bg-extra-color group-hover:text-white transition-all duration-300">
+								<i class="icon-doc-text-inv text-[20px]"></i>
+							</div>
+							<div>
+								<h4 class="text-[18px] text-white font-medium mb-[5px] leading-[1.4]">Work in Progress: A Booking System for Remote Laboratories ‑ The EXPLORE Energy Digital Academy (EEDA) case study</h4>
+								<p class="text-[15px] text-main-color leading-[1.6]">Villazon, A., Ormachea, O., Orellana, A., Zenteno, A., Fransson T. (2023) • <span class="italic text-white/60">REV2023 Conference</span></p>
+							</div>
+						</div>
+
+						<!-- Publication 4 -->
+						<div class="w-full p-[25px] rounded-[12px] bg-[#1e1e24] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group flex items-start gap-[20px]">
+							<div class="min-w-[50px] h-[50px] rounded-full bg-[#2a233e] flex items-center justify-center text-extra-color group-hover:bg-extra-color group-hover:text-white transition-all duration-300">
+								<i class="icon-doc-text-inv text-[20px]"></i>
+							</div>
+							<div>
+								<h4 class="text-[18px] text-white font-medium mb-[5px] leading-[1.4]">A Low‑Cost Spectrometry Remote Laboratory</h4>
+								<p class="text-[15px] text-main-color leading-[1.6]">Villazon, A., Ormachea, O., Zenteno, A., Orellana, A. (2023) • <span class="italic text-white/60">Lecture Notes in Networks and Systems, vol 524. Springer</span></p>
+							</div>
+						</div>
+
+						<!-- Publication 5 -->
+						<div class="w-full p-[25px] rounded-[12px] bg-[#1e1e24] border border-white/5 shadow-md hover:shadow-xl hover:border-extra-color/30 transition-all duration-300 group flex items-start gap-[20px]">
+							<div class="min-w-[50px] h-[50px] rounded-full bg-[#2a233e] flex items-center justify-center text-extra-color group-hover:bg-extra-color group-hover:text-white transition-all duration-300">
+								<i class="icon-doc-text-inv text-[20px]"></i>
+							</div>
+							<div>
+								<h4 class="text-[18px] text-white font-medium mb-[5px] leading-[1.4]">Characterizing Java Streams in the Wild</h4>
+								<p class="text-[15px] text-main-color leading-[1.6]">Rosales E., Rosa A., Basso M., Villazon, A., Orellana, A., Zenteno, A., et al (2022) • <span class="italic text-white/60">26th International Conference on Engineering of Complex Computer Systems (ICECCS)</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /PUBLICATIONS -->
 
 		<!-- COPYRIGHT -->
 		<div class="foliox_tm_section w-full h-auto clear-both float-left">
@@ -633,6 +1224,124 @@
 	<!--[if lt IE 10]> <script type="text/javascript" src="js/ie8.js"></script> <![endif]-->
 	<script src="assets/js/plugins.js"></script>
 	<script src="assets/js/init.js"></script>
+	
+	<!-- THESIS TOGGLE SCRIPT -->
+	<script>
+		function toggleThesisDetails() {
+			const details = document.getElementById('thesis-details');
+			const btnContainer = document.getElementById('thesis-toggle-btn').parentElement;
+			
+			details.style.display = 'block';
+			btnContainer.style.display = 'none';
+		}
+	</script>
+
+	<!-- DIFFUSION CANVAS ANIMATION -->
+	<script>
+		const canvas = document.getElementById('diffusionCanvas');
+		const ctx = canvas.getContext('2d');
+		let width, height;
+		let particles = [];
+
+		// Configuration
+		const particleCount = 100;
+		const connectionDistance = 100;
+		const moveSpeed = 0.5;
+		const gridSpacing = 50; // Grid spacing in pixels
+
+		function resize() {
+			width = canvas.width = window.innerWidth;
+			height = canvas.height = window.innerHeight;
+		}
+
+		// Draw subtle grid
+		function drawGrid() {
+			ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'; // Very subtle white grid
+			ctx.lineWidth = 0.5;
+			
+			// Vertical lines
+			for (let x = 0; x <= width; x += gridSpacing) {
+				ctx.beginPath();
+				ctx.moveTo(x, 0);
+				ctx.lineTo(x, height);
+				ctx.stroke();
+			}
+			
+			// Horizontal lines
+			for (let y = 0; y <= height; y += gridSpacing) {
+				ctx.beginPath();
+				ctx.moveTo(0, y);
+				ctx.lineTo(width, y);
+				ctx.stroke();
+			}
+		}
+
+		class Particle {
+			constructor() {
+				this.x = Math.random() * width;
+				this.y = Math.random() * height;
+				this.vx = (Math.random() - 0.5) * moveSpeed;
+				this.vy = (Math.random() - 0.5) * moveSpeed;
+				this.size = Math.random() * 2;
+			}
+
+			update() {
+				this.x += this.vx;
+				this.y += this.vy;
+				// Bounce off edges
+				if (this.x < 0 || this.x > width) this.vx *= -1;
+				if (this.y < 0 || this.y > height) this.vy *= -1;
+			}
+
+			draw() {
+				ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'; // White dots
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+				ctx.fill();
+			}
+		}
+
+		function init() {
+			resize();
+			for (let i = 0; i < particleCount; i++) {
+				particles.push(new Particle());
+			}
+		}
+
+		function animate() {
+			ctx.clearRect(0, 0, width, height);
+			
+			// Draw grid first (behind everything)
+			drawGrid();
+			
+			// Draw connections (The "Neural" part)
+			for (let i = 0; i < particles.length; i++) {
+				particles[i].update();
+				particles[i].draw();
+				for (let j = i; j < particles.length; j++) {
+					const dx = particles[i].x - particles[j].x;
+					const dy = particles[i].y - particles[j].y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+					if (distance < connectionDistance) {
+						ctx.beginPath();
+						// Opacity based on distance (Denoising effect)
+						const opacity = 1 - (distance / connectionDistance);
+						ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.2})`; // White connections
+						ctx.lineWidth = 1;
+						ctx.moveTo(particles[i].x, particles[i].y);
+						ctx.lineTo(particles[j].x, particles[j].y);
+						ctx.stroke();
+					}
+				}
+			}
+			requestAnimationFrame(animate);
+		}
+
+		window.addEventListener('resize', resize);
+		init();
+		animate();
+	</script>
+	<!-- /DIFFUSION CANVAS ANIMATION -->
 	<!-- /SCRIPTS -->
 
 </body>
