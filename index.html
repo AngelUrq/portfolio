@@ -24,10 +24,10 @@
 			background: linear-gradient(180deg, #322850 0%, #1e1e24 100%) !important;
 			opacity: 1 !important;
 			backdrop-filter: none !important;
-			padding: 0 !important; /* Inner spacing handled by children */
+			padding: 0 !important;
 		}
 		.solid-card-bg .details {
-			padding: 40px !important; /* Increased padding for better spacing */
+			padding: 40px !important;
 		}
 		.foliox_tm_header {
 			background: rgba(0, 0, 0, 0.3) !important;
@@ -54,31 +54,167 @@
 		#avatar-img {
 			position: relative;
 			z-index: 1;
-		}
-		#avatar-img {
 			display: block;
 			width: 100%;
 			height: auto;
 		}
-		/* Tree Timeline Responsive */
-		@media (max-width: 600px) {
-			.tree-node {
-				padding-left: 35px !important;
-			}
-			.tree-node .flex {
-				flex-direction: column;
-				gap: 15px !important;
-			}
-			.tree-timeline h4 {
-				font-size: 18px !important;
-			}
-		}
+		
 		/* Featured Project Button Hover */
 		#thesis-toggle-btn:hover {
 			background: linear-gradient(135deg, rgba(0, 192, 255, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%) !important;
 			border-color: rgba(0, 192, 255, 0.4);
 			transform: translateY(-2px);
 			box-shadow: 0 8px 24px rgba(0, 192, 255, 0.2);
+		}
+		
+		/* =============================================
+		   RESPONSIVE STYLES
+		   ============================================= */
+		
+		/* Desktop Header - Hide on mobile */
+		@media (max-width: 1040px) {
+			.foliox_tm_header {
+				display: none !important;
+			}
+			.foliox_tm_mobile_menu {
+				display: block !important;
+			}
+		}
+		
+		/* Hero Section Responsive */
+		@media (max-width: 1200px) {
+			.foliox_tm_hero .name {
+				font-size: 90px !important;
+			}
+			.foliox_tm_hero .job {
+				font-size: 20px !important;
+			}
+		}
+		
+		@media (max-width: 1040px) {
+			.foliox_tm_hero .content {
+				flex-direction: column-reverse !important;
+				text-align: center;
+			}
+			.foliox_tm_hero .left {
+				width: 100% !important;
+			}
+			.foliox_tm_hero .right {
+				width: 100% !important;
+				padding-left: 0 !important;
+				margin-bottom: 30px;
+				justify-content: center !important;
+			}
+			.foliox_tm_hero .name {
+				font-size: 65px !important;
+			}
+			.foliox_tm_hero .job {
+				font-size: 18px !important;
+				margin-bottom: 30px !important;
+			}
+			#avatar-container img {
+				max-height: 280px !important;
+			}
+		}
+		
+		@media (max-width: 768px) {
+			.foliox_tm_hero .name {
+				font-size: 48px !important;
+			}
+			.foliox_tm_hero .job {
+				font-size: 16px !important;
+			}
+			#avatar-container img {
+				max-height: 220px !important;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.foliox_tm_hero .name {
+				font-size: 38px !important;
+			}
+			.foliox_tm_hero .job {
+				font-size: 15px !important;
+			}
+			#avatar-container img {
+				max-height: 180px !important;
+			}
+		}
+		
+		/* Experience Timeline Responsive */
+		/* Fix timeline dots - prevent stretching */
+		.tree-node > div[style*="border-radius: 50%"] {
+			flex-shrink: 0 !important;
+			min-width: 16px !important;
+			min-height: 16px !important;
+			max-width: 16px !important;
+			max-height: 16px !important;
+			aspect-ratio: 1 / 1 !important;
+		}
+		
+		@media (max-width: 768px) {
+			.tree-timeline {
+				padding-left: 20px !important;
+			}
+			.tree-timeline > div[style*="position: absolute; left: 48px"] {
+				left: 28px !important;
+			}
+			.tree-node {
+				padding-left: 40px !important;
+			}
+			.tree-node > div[style*="position: absolute; left: 0"] {
+				left: -20px !important;
+			}
+			.tree-node .flex.items-start {
+				flex-direction: column !important;
+				gap: 15px !important;
+			}
+			.tree-node div[style*="width: 70px; height: 70px"] {
+				width: 50px !important;
+				height: 50px !important;
+				min-width: 50px !important;
+			}
+			.tree-node h4 {
+				font-size: 20px !important;
+			}
+			.tree-node h5 {
+				font-size: 15px !important;
+			}
+			.tree-node ul li {
+				font-size: 14px !important;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.tree-node h4 {
+				font-size: 18px !important;
+			}
+			.tree-node h5 {
+				font-size: 14px !important;
+			}
+			.tree-node p {
+				font-size: 13px !important;
+			}
+		}
+		
+		/* Portfolio Grid Responsive */
+		@media (max-width: 1040px) {
+			.news_list ul li.w-1\/3 {
+				width: 50% !important;
+			}
+		}
+		
+		@media (max-width: 768px) {
+			.news_list ul {
+				margin-left: 0 !important;
+			}
+			.news_list ul li.w-1\/3 {
+				width: 100% !important;
+				padding-left: 0 !important;
+			}
+			.solid-card-bg .details {
+				padding: 25px !important;
+			}
 		}
 		
 		/* Featured Project Responsive */
@@ -90,13 +226,15 @@
 			.featured-project h3 {
 				font-size: 28px !important;
 			}
-			.featured-project div[style*="grid-template-columns: 2fr 3fr"] {
+			.featured-project div[style*="grid-template-columns: 2fr 3fr"],
+			.featured-project div[style*="grid-template-columns: 1fr 1fr"] {
 				grid-template-columns: 1fr !important;
 			}
 			.featured-project div[style*="grid-template-columns: repeat(4"] {
 				grid-template-columns: repeat(2, 1fr) !important;
 			}
 		}
+		
 		@media (max-width: 768px) {
 			.featured-project > div > div {
 				padding-left: 24px !important;
@@ -109,20 +247,164 @@
 				grid-template-columns: 1fr !important;
 			}
 			.featured-project div[style*="grid-template-columns: repeat(4"] {
-				grid-template-columns: 1fr !important;
+				grid-template-columns: 1fr 1fr !important;
 			}
 			.featured-project div[style*="width: 1px; height: 48px"] {
 				display: none !important;
 			}
+			.featured-project div[style*="display: flex; align-items: flex-start; justify-content: space-between"] {
+				flex-direction: column !important;
+				gap: 20px !important;
+			}
+			.featured-project img[style*="width: 170px"] {
+				width: 120px !important;
+			}
+			.featured-project div[style*="display: flex; align-items: center; gap: 40px"] {
+				gap: 20px !important;
+				flex-wrap: wrap !important;
+			}
+			.featured-project div[style*="font-size: 28px"] {
+				font-size: 22px !important;
+			}
 		}
+		
 		@media (max-width: 480px) {
 			.featured-project > div > div {
+				padding-left: 16px !important;
+				padding-right: 16px !important;
+			}
+			.featured-project h3 {
+				font-size: 20px !important;
+			}
+			.featured-project div[style*="grid-template-columns: repeat(4"] {
+				grid-template-columns: 1fr !important;
+			}
+			.featured-project p {
+				font-size: 14px !important;
+			}
+		}
+		
+		/* Skills Section Responsive */
+		@media (max-width: 768px) {
+			.foliox_tm_skills div[style*="grid-template-columns: repeat(2, 1fr)"] {
+				grid-template-columns: 1fr !important;
+			}
+			.foliox_tm_skills div[style*="padding: 30px"] {
+				padding: 20px !important;
+			}
+		}
+		
+		/* About Section Responsive */
+		@media (max-width: 1040px) {
+			.foliox_tm_about .wrapper {
+				flex-direction: column !important;
+			}
+			.foliox_tm_about .left {
+				width: 100% !important;
+				margin-bottom: 40px;
+			}
+			.foliox_tm_about .right {
+				width: 100% !important;
+				padding-left: 0 !important;
+			}
+			.foliox_tm_about .big_image {
+				float: none !important;
+				text-align: center;
+			}
+			.foliox_tm_about .big_image img {
+				display: inline-block;
+				max-width: 350px !important;
+			}
+			.foliox_tm_about .small_image {
+				display: none !important;
+			}
+			.foliox_tm_about div[style*="height: 120px"] {
+				height: 40px !important;
+			}
+		}
+		
+		@media (max-width: 768px) {
+			.foliox_tm_about .right .flex.-mx-\[20px\] {
+				flex-direction: column !important;
+			}
+			.foliox_tm_about .right .w-1\/2 {
+				width: 100% !important;
+			}
+			.foliox_tm_about .title {
+				font-size: 24px !important;
+			}
+			.foliox_tm_about .big_image img {
+				max-width: 280px !important;
+			}
+		}
+		
+		/* Publications Section Responsive */
+		@media (max-width: 768px) {
+			.foliox_tm_publications .grid {
+				gap: 15px !important;
+			}
+			.foliox_tm_publications div[style*="padding: 25px"] {
+				padding: 20px !important;
+			}
+			.foliox_tm_publications h4 {
+				font-size: 16px !important;
+			}
+			.foliox_tm_publications p {
+				font-size: 14px !important;
+			}
+		}
+		
+		/* Section Titles Responsive */
+		@media (max-width: 768px) {
+			.foliox_tm_main_title h3 {
+				font-size: 32px !important;
+			}
+			.foliox_tm_main_title span {
+				font-size: 17px !important;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.foliox_tm_main_title h3 {
+				font-size: 28px !important;
+			}
+		}
+		
+		/* Container Responsive */
+		@media (max-width: 768px) {
+			.container {
 				padding-left: 20px !important;
 				padding-right: 20px !important;
 			}
-			.featured-project h3 {
-				font-size: 22px !important;
+		}
+		
+		@media (max-width: 480px) {
+			.container {
+				padding-left: 15px !important;
+				padding-right: 15px !important;
 			}
+		}
+		
+		/* Mobile Menu Styles */
+		.foliox_tm_mobile_menu .dropdown_inner ul li {
+			padding: 8px 0;
+		}
+		.foliox_tm_mobile_menu .dropdown_inner ul li a {
+			font-size: 16px;
+		}
+		
+		/* Fix for line-clamp utility */
+		.line-clamp-2 {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+		
+		/* Min height for card titles */
+		.min-h-\[48px\] {
+			min-height: 48px;
 		}
 	</style>
 
@@ -179,6 +461,21 @@
 						<li class="float-left w-full"><a class="text-white inline-block p-0 font-medium"
 								href="#publications">Publications</a></li>
 					</ul>
+				</div>
+				<!-- Social Links & CV Download -->
+				<div style="clear: both; width: 100%; padding: 20px 40px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+					<div style="display: flex; align-items: center; gap: 20px;">
+						<a href="https://www.linkedin.com/in/%C3%A1ngel-zenteno-a0174020b/" target="_blank" style="color: white; font-size: 20px; transition: color 0.3s;">
+							<i class="icon-linkedin-1"></i>
+						</a>
+						<a href="https://github.com/AngelUrq/" target="_blank" style="color: white; font-size: 20px; transition: color 0.3s;">
+							<i class="icon-github-1"></i>
+						</a>
+					</div>
+					<a href="assets/CV_Angel_Zenteno.pdf" download style="color: #00c0ff; font-weight: 500; display: flex; align-items: center; gap: 8px; font-size: 14px;">
+						<i class="icon-download" style="font-size: 16px;"></i>
+						<span>Download CV</span>
+					</a>
 				</div>
 			</div>
 		</div>
